@@ -1,17 +1,14 @@
 package eu.divyansh.mychat.data
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import eu.divyansh.mychat.Injection
-import kotlinx.coroutines.launch
-import eu.divyansh.mychat.data.Message
-import eu.divyansh.mychat.data.MessageRepository
 import eu.divyansh.mychat.data.Result.*
-import eu.divyansh.mychat.data.User
-import eu.divyansh.mychat.data.UserRepo
+import kotlinx.coroutines.launch
 
 class MessageViewModel : ViewModel() {
 
@@ -43,8 +40,8 @@ class MessageViewModel : ViewModel() {
     fun sendMessage(text: String) {
         if (_currentUser.value != null) {
             val message = Message(
-                SenderfirstName = _currentUser.value!!.firstName,
-                SenderID = _currentUser.value!!.email,
+                senderFirstName = _currentUser.value!!.firstName,
+                senderId = _currentUser.value!!.email,
                 text = text
             )
             viewModelScope.launch {
@@ -71,7 +68,7 @@ class MessageViewModel : ViewModel() {
     private fun loadCurrentUser() {
         viewModelScope.launch {
             when (val result = userRepository.getCurrentUser()) {
-                is Success -> _currentUser.value = result.data!!
+                is Success -> _currentUser.value = result.data
                 is Error -> {
 
                 }
@@ -80,3 +77,4 @@ class MessageViewModel : ViewModel() {
         }
     }
 }
+

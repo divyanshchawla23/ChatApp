@@ -1,5 +1,6 @@
 package eu.divyansh.mychat.data
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,16 +24,14 @@ class RoomViewModel : ViewModel() {
     fun createRoom(name: String) {
         viewModelScope.launch {
             roomRepository.createRoom(name)
-            loadRooms()
         }
     }
 
-
     fun loadRooms() {
         viewModelScope.launch {
-            when(val result= roomRepository.getRooms()){
-                is Success -> _rooms.value = result.data
-                is Error->{
+            when (val result = roomRepository.getRooms()) {
+                is Success-> _rooms.value = result.data
+                is Error -> {
 
                 }
             }

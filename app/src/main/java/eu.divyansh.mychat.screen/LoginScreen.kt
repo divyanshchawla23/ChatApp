@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -34,6 +35,7 @@ import eu.divyansh.mychat.data.AuthViewModel
 import eu.divyansh.mychat.data.Result
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(authViewModel: AuthViewModel,
                 onNavigateToSignUp: ()-> Unit,

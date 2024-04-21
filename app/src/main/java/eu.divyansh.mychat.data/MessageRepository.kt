@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
-
 class MessageRepository(private val firestore: FirebaseFirestore) {
 
     suspend fun sendMessage(roomId: String, message: Message): Result<Unit> = try {

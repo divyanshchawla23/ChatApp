@@ -1,7 +1,7 @@
 package eu.divyansh.mychat.screen
 
 import android.os.Build
-import android.os.Message
+import eu.divyansh.mychat.data.Message
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -21,6 +22,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,15 +34,24 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import eu.divyansh.mychat.R
+import eu.divyansh.mychat.data.MessageViewModel
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-@Composable
-fun ChatScreen(  roomId: String) {
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ChatScreen(
+    roomId: String,
+    messageViewModel:
+    MessageViewModel = viewModel(),
+) {
+    val messages by messageViewModel.messages.observeAsState(emptyList())
+    messageViewModel.setRoomId(roomId)
     val text = remember { mutableStateOf("") }
     Column(
         modifier = Modifier
@@ -49,8 +61,12 @@ fun ChatScreen(  roomId: String) {
         // Display the chat messages
         LazyColumn(
             modifier = Modifier.weight(1f)
-        ) {
-
+        )  {
+            items(messages) { message ->
+                ChatMessageItem(message =  message.copy(isSentByCurrentUser
+                = message.senderId == messageViewModel.currentUser.value?.email)
+                )
+            }
         }
 
         // Chat input field and send icon
@@ -73,12 +89,12 @@ fun ChatScreen(  roomId: String) {
                 onClick = {
                     // Send the message when the icon is clicked
                     if (text.value.isNotEmpty()) {
-
+                        messageViewModel.sendMessage(text.value.trim())
                         text.value = ""
                     }
-
+                    messageViewModel.loadMessages()
                 }
-            ){
+            ) {
                 Icon(imageVector = Icons.Default.Send, contentDescription = "Send")
             }
         }
@@ -88,17 +104,17 @@ fun ChatScreen(  roomId: String) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatMessageItem(message: eu.divyansh.mychat.data.Message) {
+fun ChatMessageItem(message: Message) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        horizontalAlignment = if (message.isSentByCureentUser) Alignment.End else Alignment.Start
+        horizontalAlignment = if (message.isSentByCurrentUser) Alignment.End else Alignment.Start
     ) {
         Box(
             modifier = Modifier
                 .background(
-                    if (message.isSentByCureentUser) colorResource(id = R.color.purple_700) else Color.Gray,
+                    if (message.isSentByCurrentUser) colorResource(id = R.color.purple_700) else Color.Gray,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(8.dp)
@@ -111,14 +127,14 @@ fun ChatMessageItem(message: eu.divyansh.mychat.data.Message) {
         }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = message.SenderfirstName,
+            text = message.senderFirstName,
             style = TextStyle(
                 fontSize = 12.sp,
                 color = Color.Gray
             )
         )
         Text(
-            text = formatTimestamp(message.timesStamp), // Replace with actual timestamp logic
+            text = formatTimestamp(message.timestamp), // Replace with actual timestamp logic
             style = TextStyle(
                 fontSize = 12.sp,
                 color = Color.Gray

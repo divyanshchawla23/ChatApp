@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -31,6 +32,7 @@ import eu.divyansh.mychat.data.Room
 import eu.divyansh.mychat.data.RoomViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatRoomScreen(roomViewModel: RoomViewModel = viewModel(),
                    onJoinClicked: (Room)-> Unit) {
