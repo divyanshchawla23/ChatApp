@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "747068137005",
+    "project_id": "mychat-a0fe8",
+    "storage_bucket": "mychat-a0fe8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747068137005:android:4dadc7588ecb6281bae2a4",
+        "android_client_info": {
+          "package_name": "eu.divyansh.mychat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9Q-r88aou90CQ8bW1FWm_WKksCN9ydCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
